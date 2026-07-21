@@ -360,18 +360,28 @@ body {
 .product-modal {
   position: fixed;
   inset: 0;
-  display: none;
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
   z-index: 1000;
+  transition:
+    opacity 0.25s ease,
+    visibility 0.25s ease;
 }
 
 .product-modal.is-open {
-  display: block;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .product-modal__backdrop {
   position: absolute;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
+  opacity: 0;
+  transition: opacity 0.25s ease;
 }
 
 .product-modal__dialog {
@@ -383,6 +393,20 @@ body {
   border-radius: 16px;
   background: #fff;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+  transform: translateY(20px) scale(0.96);
+  opacity: 0;
+  transition:
+    transform 0.25s ease,
+    opacity 0.25s ease;
+}
+
+.product-modal.is-open .product-modal__backdrop {
+  opacity: 1;
+}
+
+.product-modal.is-open .product-modal__dialog {
+  transform: translateY(0) scale(1);
+  opacity: 1;
 }
 
 .product-modal__close {
@@ -505,6 +529,15 @@ body[dir="rtl"] .product-modal__close {
 
 body[dir="rtl"] .product-modal__controls {
   direction: rtl;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-modal,
+  .product-modal__backdrop,
+  .product-modal__dialog,
+  .product-modal__image {
+    transition: none;
+  }
 }
 
 body[dir="rtl"] {
