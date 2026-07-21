@@ -100,6 +100,18 @@ body {
   padding: 16px 18px;
   border-radius: 20px;
   word-break: break-word;
+  animation: chatMessageIn 0.28s ease-out both;
+}
+
+@keyframes chatMessageIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .chat-message-content {
@@ -589,8 +601,10 @@ body[dir="rtl"] .product-modal__controls {
   .product-modal,
   .product-modal__backdrop,
   .product-modal__dialog,
-  .product-modal__image {
+  .product-modal__image,
+  .chat-message {
     transition: none;
+    animation: none;
   }
 }
 
