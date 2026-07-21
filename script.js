@@ -184,7 +184,7 @@ function displayProducts(products) {
   productsContainer.querySelectorAll(".product-card").forEach((card) => {
     card.addEventListener("click", () => {
       const productId = Number(card.dataset.productId);
-      toggleSelectedProduct(productId, products);
+      toggleSelectedProduct(productId, products, card);
     });
   });
 
@@ -274,24 +274,99 @@ function renderSelectedProducts() {
     .join("");
 }
 
+/* Add or remove one selected product chip without rebuilding the whole list */
+function syncSelectedProductList(product, isSelected) {
+  const emptyState = selectedProductsList.querySelector("p");
+
+  if (emptyState) {
+    selectedProductsList.innerHTML = "";
+  }
+
+  const existingItem = selectedProductsList.querySelector(
+    `.selected-product[data-product-id="${product.id}"]`,
+  );
+
+  if (isSelected) {
+    if (existingItem) {
+      existingItem.classList.add("selected-product--pulse");
+      existingItem.addEventListener(
+        "animationend",
+        () => existingItem.classList.remove("selected-product--pulse"),
+        { once: true },
+      );
+      return;
+    }
+
+    selectedProductsList.insertAdjacentHTML(
+      "beforeend",
+      `
+      <div class="selected-product selected-product--pulse" data-product-id="${product.id}">
+        <img src="${product.image}" alt="${product.name}">
+        <div class="selected-product__content">
+          <strong>${product.name}</strong>
+          <span>${product.brand}</span>
+          <button type="button" class="remove-selected-product" aria-label="Remove ${product.name}">
+            Remove
+          </button>
+        </div>
+      </div>
+    `,
+    );
+
+    const insertedItem = selectedProductsList.querySelector(
+      `.selected-product[data-product-id="${product.id}"]`,
+    );
+
+    if (insertedItem) {
+      insertedItem.addEventListener(
+        "animationend",
+        () => insertedItem.classList.remove("selected-product--pulse"),
+        { once: true },
+      );
+    }
+    return;
+  }
+
+  if (existingItem) {
+    existingItem.remove();
+  }
+
+  if (selectedProducts.length === 0) {
+    selectedProductsList.innerHTML = "<p>No products selected yet.</p>";
+  }
+}
+
 /* Add a product to the selected list or remove it if it's already there */
-function toggleSelectedProduct(productId, allProducts) {
+function toggleSelectedProduct(productId, allProducts, cardElement) {
   const existingIndex = selectedProducts.findIndex(
     (product) => product.id === productId,
   );
 
+  const isSelected = existingIndex < 0;
+  const product =
+    existingIndex >= 0
+      ? selectedProducts[existingIndex]
+      : allProducts.find((item) => item.id === productId);
+
   if (existingIndex >= 0) {
     selectedProducts.splice(existingIndex, 1);
   } else {
-    const product = allProducts.find((item) => item.id === productId);
     if (product) {
       selectedProducts.push(product);
     }
   }
 
   saveSelectedProducts();
-  renderSelectedProducts();
-  displayProducts(allProducts || currentProducts);
+
+  if (product) {
+    syncSelectedProductList(product, isSelected);
+  } else {
+    renderSelectedProducts();
+  }
+
+  if (cardElement) {
+    cardElement.classList.toggle("selected", isSelected);
+  }
 }
 
 /* Filter and display products when category changes */
