@@ -375,13 +375,13 @@ function renderAdviceProducts(products) {
     .slice(0, 4)
     .map(
       (product) => `
-        <div class="advice-product-card">
+        <button type="button" class="advice-product-card" data-product-id="${product.id}" aria-label="Open details for ${product.name}">
           <img src="${product.image}" alt="${product.name}">
           <div>
             <strong>${product.name}</strong>
             <span>${product.brand}</span>
           </div>
-        </div>
+        </button>
       `,
     )
     .join("");
@@ -392,6 +392,12 @@ function renderAdviceProducts(products) {
       <div class="advice-products-grid">${galleryHtml}</div>
     </div>
   `;
+}
+
+/* Find a product by its ID from the loaded catalog or selected products */
+function findProductById(productId) {
+  const catalog = allProducts.length > 0 ? allProducts : selectedProducts;
+  return catalog.find((product) => product.id === productId);
 }
 
 /* Send the selected products as structured data to the worker */
@@ -427,6 +433,27 @@ selectedProductsList.addEventListener("click", (e) => {
     if (currentProducts.length > 0) {
       displayProducts(currentProducts);
     }
+  }
+});
+
+/* Open product details when a mentioned product is clicked in the chat */
+chatWindow.addEventListener("click", (e) => {
+  const adviceCard = e.target.closest(".advice-product-card");
+
+  if (!adviceCard) {
+    return;
+  }
+
+  const productId = Number(adviceCard.dataset.productId);
+
+  if (Number.isNaN(productId)) {
+    return;
+  }
+
+  const product = findProductById(productId);
+
+  if (product) {
+    openProductModal(product);
   }
 });
 
