@@ -400,11 +400,19 @@ body {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background 0.3s;
+  transition:
+    background 0.3s,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .chat-form button:hover {
   background: var(--brand-gold);
+}
+
+.chat-form button:active {
+  transform: translateY(2px) scale(0.96);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.15);
 }
 
 .chat-form button:focus {
@@ -602,8 +610,11 @@ body {
 
 @media (prefers-reduced-motion: reduce) {
   .product-card.selected,
-  .selected-product {
+  .selected-product,
+  .chat-form button,
+  .generate-btn {
     animation: none;
+    transition: none;
   }
 }
 
@@ -663,11 +674,24 @@ body {
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.3s;
+  transition:
+    background 0.3s,
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .generate-btn:hover {
   background: linear-gradient(90deg, var(--brand-red), var(--brand-gold));
+}
+
+.generate-btn:active {
+  transform: translateY(2px) scale(0.99);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.18);
+}
+
+.generate-btn:focus {
+  outline: 2px solid var(--brand-black);
+  outline-offset: 3px;
 }
 
 .generate-btn i {
