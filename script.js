@@ -398,6 +398,22 @@ async function sendMessage(userText) {
   );
   scrollChatToBottom();
 
+  const thinkingBubble = document.createElement("div");
+  thinkingBubble.className = "chat-message bot-message thinking-message";
+  thinkingBubble.innerHTML = `
+    <strong>Advisor:</strong>
+    <div class="chat-message-content">
+      <span class="thinking-dots" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+      <span>Thinking...</span>
+    </div>
+  `;
+  chatWindow.appendChild(thinkingBubble);
+  scrollChatToBottom();
+
   const response = await fetch(workerUrl, {
     method: "POST",
     headers: {
@@ -414,6 +430,7 @@ async function sendMessage(userText) {
     data?.choices?.[0]?.message?.content ||
     "Sorry, I could not get a reply right now.";
 
+  thinkingBubble.remove();
   messages.push({ role: "assistant", content: reply });
 
   chatWindow.insertAdjacentHTML(
