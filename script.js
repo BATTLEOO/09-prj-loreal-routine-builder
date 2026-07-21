@@ -260,11 +260,14 @@ function renderSelectedProducts() {
     .map(
       (product) => `
       <div class="selected-product" data-product-id="${product.id}">
-        <strong>${product.name}</strong>
-        <span>${product.brand}</span>
-        <button type="button" class="remove-selected-product" aria-label="Remove ${product.name}">
-          Remove
-        </button>
+        <img src="${product.image}" alt="${product.name}">
+        <div class="selected-product__content">
+          <strong>${product.name}</strong>
+          <span>${product.brand}</span>
+          <button type="button" class="remove-selected-product" aria-label="Remove ${product.name}">
+            Remove
+          </button>
+        </div>
       </div>
     `,
     )
@@ -516,8 +519,8 @@ async function sendMessage(userText, options = {}) {
     "beforeend",
     `
     <div class="chat-message user-message">
-      <strong>You:</strong> ${userText}
       ${renderRequestProducts(requestProducts)}
+      <strong>You:</strong> ${userText}
     </div>
   `,
   );
