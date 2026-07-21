@@ -402,10 +402,79 @@ body {
 
 .product-modal__image {
   display: block;
-  width: 120px;
-  height: 120px;
+  width: 100%;
+  max-width: 220px;
+  height: 220px;
   object-fit: contain;
+  margin: 0 auto;
+  transform-origin: center center;
+  transition: transform 0.2s ease;
+}
+
+.product-modal__image-frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 240px;
   margin-bottom: 18px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #fafafa;
+}
+
+.product-modal__controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.product-modal__zoom-btn,
+.product-modal__zoom-reset {
+  border: 1px solid #000;
+  background: #fff;
+  color: #000;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 700;
+  transition:
+    background 0.3s,
+    color 0.3s;
+}
+
+.product-modal__zoom-btn {
+  width: 40px;
+  height: 40px;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.product-modal__zoom-reset {
+  padding: 10px 14px;
+  font-size: 13px;
+}
+
+.product-modal__zoom-btn:hover,
+.product-modal__zoom-reset:hover {
+  background: #000;
+  color: #fff;
+}
+
+.product-modal__zoom-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  background: #fff;
+  color: #000;
+}
+
+.product-modal__zoom-level {
+  min-width: 54px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .product-modal__dialog h2 {
@@ -432,6 +501,10 @@ body[dir="rtl"] .product-modal__dialog {
 body[dir="rtl"] .product-modal__close {
   inset-inline-end: auto;
   inset-inline-start: 14px;
+}
+
+body[dir="rtl"] .product-modal__controls {
+  direction: rtl;
 }
 
 body[dir="rtl"] {

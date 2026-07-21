@@ -4,6 +4,10 @@ const categoryFilter = document.getElementById("categoryFilter");
 const productsContainer = document.getElementById("productsContainer");
 const productModal = document.getElementById("productModal");
 const closeProductModal = document.getElementById("closeProductModal");
+const zoomOutProductModal = document.getElementById("zoomOutProductModal");
+const zoomInProductModal = document.getElementById("zoomInProductModal");
+const resetProductModalZoom = document.getElementById("resetProductModalZoom");
+const productModalZoomLevel = document.getElementById("productModalZoomLevel");
 const productModalImage = document.getElementById("productModalImage");
 const productModalTitle = document.getElementById("productModalTitle");
 const productModalBrand = document.getElementById("productModalBrand");
@@ -36,6 +40,10 @@ let selectedProducts = [];
 let currentProducts = [];
 let activeCategory = "";
 let activeSearchTerm = "";
+let productModalZoom = 1;
+const productModalZoomStep = 0.25;
+const productModalZoomMin = 1;
+const productModalZoomMax = 2.5;
 let messages = [
   {
     role: "system",
@@ -210,9 +218,29 @@ function openProductModal(product) {
   productModalBrand.textContent = product.brand;
   productModalDescription.textContent = product.description;
 
+  setProductModalZoom(1);
+
   productModal.classList.add("is-open");
   productModal.setAttribute("aria-hidden", "false");
   closeProductModal.focus();
+}
+
+/* Update the modal image zoom */
+function setProductModalZoom(nextZoom) {
+  productModalZoom = Math.min(
+    productModalZoomMax,
+    Math.max(productModalZoomMin, nextZoom),
+  );
+
+  productModalImage.style.transform = `scale(${productModalZoom})`;
+  productModalZoomLevel.textContent = `${Math.round(productModalZoom * 100)}%`;
+
+  zoomOutProductModal.disabled = productModalZoom <= productModalZoomMin;
+  zoomInProductModal.disabled = productModalZoom >= productModalZoomMax;
+}
+
+function zoomProductModal(direction) {
+  setProductModalZoom(productModalZoom + direction * productModalZoomStep);
 }
 
 /* Close the product details modal */
@@ -375,6 +403,18 @@ productModal.addEventListener("click", (event) => {
 
 closeProductModal.addEventListener("click", () => {
   closeProductDetailsModal();
+});
+
+zoomOutProductModal.addEventListener("click", () => {
+  zoomProductModal(-1);
+});
+
+zoomInProductModal.addEventListener("click", () => {
+  zoomProductModal(1);
+});
+
+resetProductModalZoom.addEventListener("click", () => {
+  setProductModalZoom(1);
 });
 
 document.addEventListener("keydown", (event) => {

@@ -71,7 +71,35 @@
           >
             &times;
           </button>
-          <img id="productModalImage" class="product-modal__image" alt="" />
+          <div class="product-modal__image-frame">
+            <img id="productModalImage" class="product-modal__image" alt="" />
+          </div>
+          <div class="product-modal__controls" aria-label="Image zoom controls">
+            <button
+              type="button"
+              id="zoomOutProductModal"
+              class="product-modal__zoom-btn"
+            >
+              -
+            </button>
+            <span id="productModalZoomLevel" class="product-modal__zoom-level">
+              100%
+            </span>
+            <button
+              type="button"
+              id="zoomInProductModal"
+              class="product-modal__zoom-btn"
+            >
+              +
+            </button>
+            <button
+              type="button"
+              id="resetProductModalZoom"
+              class="product-modal__zoom-reset"
+            >
+              Reset
+            </button>
+          </div>
           <h2 id="productModalTitle"></h2>
           <p id="productModalBrand" class="product-modal__brand"></p>
           <p
