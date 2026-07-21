@@ -394,6 +394,40 @@ function renderAdviceProducts(products) {
   `;
 }
 
+/* Build a compact image gallery for the user's routine request */
+function renderRequestProducts(products) {
+  if (products.length === 0) {
+    return "";
+  }
+
+  const uniqueProducts = products.filter(
+    (product, index, array) =>
+      array.findIndex((item) => item.id === product.id) === index,
+  );
+
+  const galleryHtml = uniqueProducts
+    .slice(0, 4)
+    .map(
+      (product) => `
+        <div class="request-product-card">
+          <img src="${product.image}" alt="${product.name}">
+          <div>
+            <strong>${product.name}</strong>
+            <span>${product.brand}</span>
+          </div>
+        </div>
+      `,
+    )
+    .join("");
+
+  return `
+    <div class="request-products">
+      <span class="request-products-label">Selected products</span>
+      <div class="request-products-grid">${galleryHtml}</div>
+    </div>
+  `;
+}
+
 /* Find a product by its ID from the loaded catalog or selected products */
 function findProductById(productId) {
   const catalog = allProducts.length > 0 ? allProducts : selectedProducts;
@@ -462,13 +496,29 @@ function scrollChatToBottom() {
   chatWindow.scrollTop = chatWindow.scrollHeight;
 }
 
-async function sendMessage(userText) {
+async function sendMessage(userText, options = {}) {
+  const requestProducts = Array.isArray(options.products)
+    ? options.products
+    : [];
+
+  if (requestProducts.length > 0) {
+    messages.push({
+      role: "user",
+      content: `Selected products:\n${requestProducts
+        .map((product) => `- ${product.name}`)
+        .join("\n")}`,
+    });
+  }
+
   messages.push({ role: "user", content: userText });
 
   chatWindow.insertAdjacentHTML(
     "beforeend",
     `
-    <div class="chat-message user-message"><strong>You:</strong> ${userText}</div>
+    <div class="chat-message user-message">
+      <strong>You:</strong> ${userText}
+      ${renderRequestProducts(requestProducts)}
+    </div>
   `,
   );
   scrollChatToBottom();
@@ -524,10 +574,10 @@ async function sendMessage(userText) {
 
 /* Create the first routine from the selected products */
 generateRoutineButton.addEventListener("click", async () => {
-  const prompt = `Build a personalized routine using these selected products:\n${getSelectedProductsSummary()}`;
+  const prompt = "Build a personalized routine using the selected products.";
 
   chatWindow.innerHTML = "";
-  await sendMessage(prompt);
+  await sendMessage(prompt, { products: selectedProducts });
 });
 
 /* Clear all saved selections */
