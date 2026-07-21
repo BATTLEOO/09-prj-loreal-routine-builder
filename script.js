@@ -356,6 +356,10 @@ selectedProductsList.addEventListener("click", (e) => {
 async function sendMessage(userText) {
   messages.push({ role: "user", content: userText });
 
+  chatWindow.innerHTML += `
+    <div class="chat-message user-message"><strong>You:</strong> ${userText}</div>
+  `;
+
   const response = await fetch(workerUrl, {
     method: "POST",
     headers: {
@@ -375,7 +379,6 @@ async function sendMessage(userText) {
   messages.push({ role: "assistant", content: reply });
 
   chatWindow.innerHTML += `
-    <div class="chat-message user-message"><strong>You:</strong> ${userText}</div>
     <div class="chat-message bot-message"><strong>Advisor:</strong> ${reply}</div>
   `;
 }
