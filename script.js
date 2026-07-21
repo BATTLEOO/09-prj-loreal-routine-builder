@@ -1,4 +1,5 @@
 /* Get references to DOM elements */
+const productSearch = document.getElementById("productSearch");
 const categoryFilter = document.getElementById("categoryFilter");
 const productsContainer = document.getElementById("productsContainer");
 const selectedProductsList = document.getElementById("selectedProductsList");
@@ -12,9 +13,12 @@ const workerUrl = "https://loreal-cloudflare-worker.jason01.workers.dev/";
 const selectedProductsStorageKey = "loreal-selected-products";
 
 /* Keep track of selected products and the conversation */
+let allProducts = [];
 let selectedProducts = [];
 let currentProducts = [];
 let expandedProductIds = [];
+let activeCategory = "";
+let activeSearchTerm = "";
 let messages = [
   {
     role: "system",
@@ -77,6 +81,53 @@ async function loadProducts() {
   const response = await fetch("products.json");
   const data = await response.json();
   return data.products;
+}
+
+/* Filter products by category and search term */
+function filterProducts(products) {
+  return products.filter((product) => {
+    const matchesCategory = activeCategory
+      ? product.category === activeCategory
+      : true;
+
+    const searchValue = activeSearchTerm.trim().toLowerCase();
+    if (!searchValue) {
+      return matchesCategory;
+    }
+
+    const searchableText = [
+      product.name,
+      product.brand,
+      product.category,
+      product.description,
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    const matchesSearch = searchableText.includes(searchValue);
+
+    return matchesCategory && matchesSearch;
+  });
+}
+
+/* Render the current filtered product list */
+function renderFilteredProducts() {
+  if (allProducts.length === 0) {
+    return;
+  }
+
+  const filteredProducts = filterProducts(allProducts);
+
+  if (activeCategory || activeSearchTerm.trim()) {
+    displayProducts(filteredProducts);
+    return;
+  }
+
+  productsContainer.innerHTML = `
+    <div class="placeholder-message">
+      Select a category or search to view products
+    </div>
+  `;
 }
 
 /* Create HTML for displaying product cards */
@@ -186,16 +237,14 @@ function toggleSelectedProduct(productId, allProducts) {
 
 /* Filter and display products when category changes */
 categoryFilter.addEventListener("change", async (e) => {
-  const products = await loadProducts();
-  const selectedCategory = e.target.value;
+  activeCategory = e.target.value;
+  renderFilteredProducts();
+});
 
-  /* filter() creates a new array containing only products 
-     where the category matches what the user selected */
-  const filteredProducts = products.filter(
-    (product) => product.category === selectedCategory,
-  );
-
-  displayProducts(filteredProducts);
+/* Filter products as the user types */
+productSearch.addEventListener("input", (e) => {
+  activeSearchTerm = e.target.value;
+  renderFilteredProducts();
 });
 
 /* Build a short summary of the selected products for the AI */
@@ -308,3 +357,9 @@ chatForm.addEventListener("submit", async (e) => {
 /* Show the empty selected products state on load */
 loadSelectedProducts();
 renderSelectedProducts();
+
+/* Load products once and reuse them for category and search filtering */
+loadProducts().then((products) => {
+  allProducts = products;
+  renderFilteredProducts();
+});

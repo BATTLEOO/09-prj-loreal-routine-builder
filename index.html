@@ -25,8 +25,20 @@
 
       <!-- Category Filter -->
       <div class="search-section">
+        <label class="visually-hidden" for="productSearch">
+          Search products by name or keyword
+        </label>
+        <input
+          id="productSearch"
+          type="search"
+          placeholder="Search products by name or keyword"
+          autocomplete="off"
+        />
+        <label class="visually-hidden" for="categoryFilter">
+          Filter products by category
+        </label>
         <select id="categoryFilter">
-          <option value="" disabled selected>Choose a Category</option>
+          <option value="" selected>All Categories</option>
           <option value="cleanser">Cleansers</option>
           <option value="moisturizer">Moisturizers & Treatments</option>
           <option value="haircare">Haircare</option>
