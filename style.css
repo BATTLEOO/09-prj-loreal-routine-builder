@@ -219,6 +219,38 @@ body {
   min-height: 110px;
 }
 
+.product-description-toggle {
+  margin-top: 10px;
+  align-self: flex-start;
+  border: none;
+  background: transparent;
+  color: #000;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.product-description-toggle:hover,
+.product-description-toggle:focus {
+  color: #666;
+  outline: none;
+}
+
+.product-description {
+  margin-top: 8px;
+  font-size: 13px;
+  line-height: 1.4;
+  color: #444;
+  display: none;
+}
+
+.product-description.visible {
+  display: block;
+}
+
 .product-card h3 {
   font-size: 16px;
   margin-bottom: 8px;

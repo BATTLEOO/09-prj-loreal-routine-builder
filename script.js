@@ -14,6 +14,7 @@ const selectedProductsStorageKey = "loreal-selected-products";
 /* Keep track of selected products and the conversation */
 let selectedProducts = [];
 let currentProducts = [];
+let expandedProductIds = [];
 let messages = [
   {
     role: "system",
@@ -87,6 +88,7 @@ function displayProducts(products) {
       const isSelected = selectedProducts.some(
         (selectedProduct) => selectedProduct.id === product.id,
       );
+      const isDescriptionOpen = expandedProductIds.includes(product.id);
 
       return `
     <div class="product-card${isSelected ? " selected" : ""}" data-product-id="${product.id}">
@@ -94,6 +96,12 @@ function displayProducts(products) {
       <div class="product-info">
         <h3>${product.name}</h3>
         <p>${product.brand}</p>
+        <button type="button" class="product-description-toggle" aria-expanded="${isDescriptionOpen}" aria-controls="product-description-${product.id}">
+          ${isDescriptionOpen ? "Hide details" : "Show details"}
+        </button>
+        <p class="product-description${isDescriptionOpen ? " visible" : ""}" id="product-description-${product.id}">
+          ${product.description}
+        </p>
       </div>
     </div>
   `;
@@ -107,6 +115,31 @@ function displayProducts(products) {
       toggleSelectedProduct(productId, products);
     });
   });
+
+  productsContainer
+    .querySelectorAll(".product-description-toggle")
+    .forEach((button) => {
+      button.addEventListener("click", (event) => {
+        event.stopPropagation();
+
+        const card = button.closest(".product-card");
+        const productId = Number(card?.dataset.productId);
+
+        if (Number.isNaN(productId)) {
+          return;
+        }
+
+        if (expandedProductIds.includes(productId)) {
+          expandedProductIds = expandedProductIds.filter(
+            (expandedId) => expandedId !== productId,
+          );
+        } else {
+          expandedProductIds.push(productId);
+        }
+
+        displayProducts(products);
+      });
+    });
 }
 
 /* Show the products the user picked */
