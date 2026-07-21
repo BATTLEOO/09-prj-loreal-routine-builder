@@ -1,3 +1,13 @@
+/* brand palette inspired by the reference image */
+:root {
+  --brand-black: #000000;
+  --brand-white: #ffffff;
+  --brand-red: #ff003b;
+  --brand-gold: #e3a535;
+  --brand-ink: #333333;
+  --brand-soft: #faf7f2;
+}
+
 /* —— basic reset —— */
 * {
   box-sizing: border-box;
@@ -8,9 +18,14 @@
 /* —— body + fonts —— */
 body {
   font-family: "Montserrat", Arial, Helvetica, sans-serif;
-  color: #333;
+  color: var(--brand-ink);
   display: flex;
   justify-content: center;
+  background: linear-gradient(
+    180deg,
+    var(--brand-white) 0%,
+    var(--brand-soft) 100%
+  );
 }
 
 .page-wrapper {
@@ -34,6 +49,7 @@ body {
   font-size: 22px;
   font-weight: 500;
   margin-bottom: 10px;
+  color: var(--brand-red);
 }
 
 /* category filter */
@@ -50,10 +66,10 @@ body {
   flex: 1 1 260px;
   padding: 16px;
   font-size: 18px;
-  border: 2px solid #000;
+  border: 2px solid var(--brand-black);
   border-radius: 8px;
   cursor: pointer;
-  background-color: white;
+  background-color: var(--brand-white);
   font-weight: 500;
 }
 
@@ -64,13 +80,13 @@ body {
 .search-section input:focus,
 .search-section select:focus {
   outline: none;
-  border-color: #666;
+  border-color: var(--brand-red);
 }
 
 /* chat section */
 .chatbox {
   margin: 40px 0;
-  border: 2px solid #000;
+  border: 2px solid var(--brand-black);
   border-radius: 8px;
   padding: 32px;
 }
@@ -91,7 +107,7 @@ body {
   max-height: 460px;
   overflow-y: auto;
   scroll-behavior: smooth;
-  background: #fafafa;
+  background: linear-gradient(180deg, #ffffff 0%, #f7f3ec 100%);
   margin-bottom: 20px;
 }
 
@@ -141,17 +157,17 @@ body {
 
 .user-message {
   align-self: flex-end;
-  background: #000;
-  color: #fff;
+  background: var(--brand-black);
+  color: var(--brand-white);
   border-bottom-right-radius: 4px;
   text-align: right;
 }
 
 .bot-message {
   align-self: flex-start;
-  background: #fff;
-  color: #333;
-  border: 1px solid #ddd;
+  background: var(--brand-white);
+  color: var(--brand-ink);
+  border: 1px solid #e5dac7;
   border-bottom-left-radius: 4px;
   text-align: left;
 }
@@ -223,19 +239,19 @@ body {
   padding: 12px;
   font-size: 18px;
   border: none;
-  border-bottom: 2px solid #ccc;
+  border-bottom: 2px solid #cfc6b7;
   background: transparent;
 }
 
 .chat-form input:focus {
   outline: none;
-  border-bottom-color: #000;
+  border-bottom-color: var(--brand-red);
 }
 
 .chat-form button {
   font-size: 18px;
-  background: #000;
-  color: #fff;
+  background: var(--brand-red);
+  color: var(--brand-white);
   border: none;
   padding: 12px;
   width: 48px;
@@ -248,11 +264,11 @@ body {
 }
 
 .chat-form button:hover {
-  background: #666666;
+  background: var(--brand-gold);
 }
 
 .chat-form button:focus {
-  outline: 2px solid #000;
+  outline: 2px solid var(--brand-black);
   outline-offset: 2px;
 }
 
@@ -274,7 +290,7 @@ body {
   margin: 60px 0 40px;
   text-align: center;
   font-size: 14px;
-  color: #666;
+  color: #6b6253;
 }
 
 .site-footer nav {
@@ -283,12 +299,12 @@ body {
 
 .site-footer a {
   margin: 0 8px;
-  color: #000;
+  color: var(--brand-black);
   text-decoration: none;
 }
 
 .site-footer a:hover {
-  color: #666666;
+  color: var(--brand-red);
 }
 
 /* products grid */
@@ -315,14 +331,14 @@ body {
 }
 
 .product-card:hover {
-  border-color: #000;
+  border-color: var(--brand-red);
   transform: translateY(-2px);
 }
 
 .product-card.selected {
-  border-color: #000;
-  box-shadow: 0 0 0 2px #000 inset;
-  background: #f7f7f7;
+  border-color: var(--brand-red);
+  box-shadow: 0 0 0 2px var(--brand-red) inset;
+  background: #fff6f8;
 }
 
 .product-card img {
@@ -345,7 +361,7 @@ body {
   align-self: flex-start;
   border: none;
   background: transparent;
-  color: #000;
+  color: var(--brand-black);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
@@ -356,7 +372,7 @@ body {
 
 .product-description-toggle:hover,
 .product-description-toggle:focus {
-  color: #666;
+  color: var(--brand-red);
   outline: none;
 }
 
@@ -374,8 +390,9 @@ body {
 .selected-products {
   margin: 40px 0;
   padding: 20px;
-  border: 2px solid #000;
+  border: 2px solid var(--brand-black);
   border-radius: 8px;
+  background: linear-gradient(180deg, var(--brand-white) 0%, #fffaf0 100%);
 }
 
 .selected-products-header {
@@ -402,16 +419,16 @@ body {
   flex-direction: column;
   gap: 4px;
   padding: 12px 14px;
-  border: 1px solid #ccc;
+  border: 1px solid #e6d8bf;
   border-radius: 999px;
-  background: #fafafa;
+  background: var(--brand-white);
 }
 
 .remove-selected-product,
 .clear-btn {
-  border: 1px solid #000;
-  background: #fff;
-  color: #000;
+  border: 1px solid var(--brand-black);
+  background: var(--brand-white);
+  color: var(--brand-black);
   border-radius: 999px;
   cursor: pointer;
   font-weight: 500;
@@ -433,8 +450,8 @@ body {
 
 .clear-btn:hover,
 .remove-selected-product:hover {
-  background: #000;
-  color: #fff;
+  background: var(--brand-red);
+  color: var(--brand-white);
 }
 
 .selected-product strong {
@@ -452,8 +469,8 @@ body {
   padding: 18px;
   font-size: 19px;
   font-weight: 500;
-  color: #fff;
-  background: #000;
+  color: var(--brand-white);
+  background: linear-gradient(90deg, var(--brand-black), var(--brand-red));
   border: none;
   border-radius: 8px;
   cursor: pointer;
@@ -461,7 +478,7 @@ body {
 }
 
 .generate-btn:hover {
-  background: #666;
+  background: linear-gradient(90deg, var(--brand-red), var(--brand-gold));
 }
 
 .generate-btn i {
@@ -491,7 +508,7 @@ body {
 .product-modal__backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
+  background: rgba(0, 0, 0, 0.65);
   opacity: 0;
   transition: opacity 0.25s ease;
 }
@@ -503,7 +520,7 @@ body {
   margin: 8vh auto;
   padding: 28px;
   border-radius: 16px;
-  background: #fff;
+  background: linear-gradient(180deg, var(--brand-white) 0%, #fff9ef 100%);
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
   transform: translateY(20px) scale(0.96);
   opacity: 0;
@@ -529,8 +546,8 @@ body {
   height: 38px;
   border: none;
   border-radius: 999px;
-  background: #000;
-  color: #fff;
+  background: var(--brand-red);
+  color: var(--brand-white);
   font-size: 24px;
   line-height: 1;
   cursor: pointer;
@@ -556,7 +573,7 @@ body {
   margin-bottom: 18px;
   overflow: hidden;
   border-radius: 12px;
-  background: #fafafa;
+  background: linear-gradient(180deg, #fffdf9 0%, #f5ebda 100%);
 }
 
 .product-modal__controls {
@@ -570,9 +587,9 @@ body {
 
 .product-modal__zoom-btn,
 .product-modal__zoom-reset {
-  border: 1px solid #000;
-  background: #fff;
-  color: #000;
+  border: 1px solid var(--brand-black);
+  background: var(--brand-white);
+  color: var(--brand-black);
   border-radius: 999px;
   cursor: pointer;
   font-weight: 700;
@@ -595,15 +612,15 @@ body {
 
 .product-modal__zoom-btn:hover,
 .product-modal__zoom-reset:hover {
-  background: #000;
-  color: #fff;
+  background: var(--brand-gold);
+  color: var(--brand-white);
 }
 
 .product-modal__zoom-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-  background: #fff;
-  color: #000;
+  background: var(--brand-white);
+  color: var(--brand-black);
 }
 
 .product-modal__zoom-level {
@@ -620,14 +637,14 @@ body {
 
 .product-modal__brand {
   font-size: 18px;
-  color: #666;
+  color: var(--brand-red);
   margin-bottom: 14px;
 }
 
 .product-modal__description {
   font-size: 16px;
   line-height: 1.6;
-  color: #333;
+  color: var(--brand-ink);
 }
 
 body[dir="rtl"] .product-modal__dialog {
@@ -713,4 +730,14 @@ body[dir="rtl"] .chat-form input {
 
 body[dir="rtl"] .chat-message {
   text-align: right;
+}
+
+body[dir="rtl"] .user-message {
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 4px;
+}
+
+body[dir="rtl"] .bot-message {
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 4px;
 }
