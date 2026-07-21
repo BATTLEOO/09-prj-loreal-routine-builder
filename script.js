@@ -309,11 +309,7 @@ function getSelectedProductsSummary() {
     return "No products selected yet.";
   }
 
-  return selectedProducts
-    .map(
-      (product) => `${product.brand} - ${product.name}: ${product.description}`,
-    )
-    .join("\n");
+  return selectedProducts.map((product) => `- ${product.name}`).join("\n");
 }
 
 /* Convert the assistant's markdown-style reply into readable HTML */

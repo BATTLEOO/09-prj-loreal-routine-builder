@@ -62,10 +62,7 @@ export default {
           ? {
               role: "system",
               content: `Selected products chosen by the user:\n${selectedProducts
-                .map(
-                  (product) =>
-                    `- ${product.brand} - ${product.name}: ${product.description}`,
-                )
+                .map((product) => `- ${product.name}`)
                 .join("\n")}`,
             }
           : null;
