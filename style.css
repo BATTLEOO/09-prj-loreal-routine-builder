@@ -367,3 +367,63 @@ body {
 .generate-btn i {
   margin-right: 8px;
 }
+
+body[dir="rtl"] {
+  direction: rtl;
+}
+
+body[dir="rtl"] .search-section {
+  flex-direction: row-reverse;
+}
+
+body[dir="rtl"] .search-section input,
+body[dir="rtl"] .search-section select {
+  text-align: right;
+}
+
+body[dir="rtl"] .products-grid {
+  direction: rtl;
+}
+
+body[dir="rtl"] .product-card {
+  flex-direction: row-reverse;
+  text-align: right;
+}
+
+body[dir="rtl"] .product-description-toggle,
+body[dir="rtl"] .product-description {
+  align-self: flex-end;
+  text-align: right;
+}
+
+body[dir="rtl"] .selected-products {
+  direction: rtl;
+}
+
+body[dir="rtl"] .selected-products-header {
+  flex-direction: row-reverse;
+}
+
+body[dir="rtl"] #selectedProductsList {
+  direction: rtl;
+}
+
+body[dir="rtl"] .selected-product {
+  text-align: right;
+}
+
+body[dir="rtl"] .chatbox {
+  direction: rtl;
+}
+
+body[dir="rtl"] .chat-form {
+  flex-direction: row-reverse;
+}
+
+body[dir="rtl"] .chat-form input {
+  text-align: right;
+}
+
+body[dir="rtl"] .chat-message {
+  text-align: right;
+}

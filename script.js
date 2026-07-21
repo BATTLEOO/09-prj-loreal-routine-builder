@@ -12,6 +12,16 @@ const userInput = document.getElementById("userInput");
 const workerUrl = "https://loreal-cloudflare-worker.jason01.workers.dev/";
 const selectedProductsStorageKey = "loreal-selected-products";
 
+/* Switch the page direction for RTL languages */
+const rtlLanguages = ["ar", "fa", "he", "ur", "ps", "syr", "dv"];
+const browserLanguage = navigator.language?.toLowerCase() || "";
+
+if (rtlLanguages.some((language) => browserLanguage.startsWith(language))) {
+  document.documentElement.dir = "rtl";
+} else {
+  document.documentElement.dir = "ltr";
+}
+
 /* Keep track of selected products and the conversation */
 let allProducts = [];
 let selectedProducts = [];
