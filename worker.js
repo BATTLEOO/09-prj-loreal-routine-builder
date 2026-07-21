@@ -33,6 +33,9 @@ export default {
       // Read the JSON body that the frontend sends.
       const body = await request.json();
       const messages = Array.isArray(body?.messages) ? body.messages : null;
+      const selectedProducts = Array.isArray(body?.selectedProducts)
+        ? body.selectedProducts
+        : [];
 
       if (!messages || messages.length === 0) {
         return new Response(
@@ -54,9 +57,22 @@ export default {
           "You are a friendly L'Oréal routine advisor. Help the user build a practical skincare, haircare, or makeup routine using the products they selected. Use the conversation history to answer follow-up questions. Keep the response clear, helpful, and easy to understand. If the user gives selected products, base the routine on those products first.",
       };
 
+      const selectedProductsMessage =
+        selectedProducts.length > 0
+          ? {
+              role: "user",
+              content: `Selected products data:\n${JSON.stringify(
+                selectedProducts,
+                null,
+                2,
+              )}`,
+            }
+          : null;
+
       // Add the system prompt before the user's conversation history.
       const normalizedMessages = [
         systemMessage,
+        ...(selectedProductsMessage ? [selectedProductsMessage] : []),
         ...messages.map((message) => ({
           role: message.role,
           content: String(message.content ?? ""),

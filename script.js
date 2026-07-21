@@ -131,6 +131,18 @@ function getSelectedProductsSummary() {
     .join("\n");
 }
 
+/* Send the selected products as structured data to the worker */
+function getSelectedProductsPayload() {
+  return selectedProducts.map((product) => ({
+    id: product.id,
+    name: product.name,
+    brand: product.brand,
+    category: product.category,
+    description: product.description,
+    image: product.image,
+  }));
+}
+
 /* Send the conversation to the worker and show the answer */
 async function sendMessage(userText) {
   messages.push({ role: "user", content: userText });
@@ -140,7 +152,10 @@ async function sendMessage(userText) {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ messages }),
+    body: JSON.stringify({
+      messages,
+      selectedProducts: getSelectedProductsPayload(),
+    }),
   });
 
   const data = await response.json();
@@ -158,7 +173,7 @@ async function sendMessage(userText) {
 
 /* Create the first routine from the selected products */
 generateRoutineButton.addEventListener("click", async () => {
-  const prompt = `Build a routine using these selected products:\n${getSelectedProductsSummary()}`;
+  const prompt = "Build a personalized routine using the selected products.";
 
   chatWindow.innerHTML = "";
   await sendMessage(prompt);
@@ -175,13 +190,6 @@ chatForm.addEventListener("submit", async (e) => {
   }
 
   userInput.value = "";
-
-  if (messages.length === 1) {
-    messages.push({
-      role: "user",
-      content: `Selected products:\n${getSelectedProductsSummary()}`,
-    });
-  }
 
   await sendMessage(userText);
 });
