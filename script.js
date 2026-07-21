@@ -9,6 +9,7 @@ const userInput = document.getElementById("userInput");
 
 /* Replace this with your deployed Worker URL if it changes */
 const workerUrl = "https://loreal-cloudflare-worker.jason01.workers.dev/";
+const selectedProductsStorageKey = "loreal-selected-products";
 
 /* Keep track of selected products and the conversation */
 let selectedProducts = [];
@@ -20,6 +21,48 @@ let messages = [
       "You are a friendly L'Oréal routine advisor. Help the user build a practical skincare, haircare, or makeup routine using the products they selected.",
   },
 ];
+
+/* Load saved selections from the browser */
+function loadSelectedProducts() {
+  try {
+    const savedProducts = localStorage.getItem(selectedProductsStorageKey);
+
+    if (!savedProducts) {
+      return;
+    }
+
+    const parsedProducts = JSON.parse(savedProducts);
+
+    if (Array.isArray(parsedProducts)) {
+      selectedProducts = parsedProducts;
+    }
+  } catch (error) {
+    selectedProducts = [];
+  }
+}
+
+/* Save the current selections to the browser */
+function saveSelectedProducts() {
+  try {
+    localStorage.setItem(
+      selectedProductsStorageKey,
+      JSON.stringify(selectedProducts),
+    );
+  } catch (error) {
+    /* Ignore storage errors so the page still works normally. */
+  }
+}
+
+/* Remove all selected products */
+function clearSelectedProducts() {
+  selectedProducts = [];
+  saveSelectedProducts();
+  renderSelectedProducts();
+
+  if (currentProducts.length > 0) {
+    displayProducts(currentProducts);
+  }
+}
 
 /* Show initial placeholder until user selects a category */
 productsContainer.innerHTML = `
@@ -76,9 +119,12 @@ function renderSelectedProducts() {
   selectedProductsList.innerHTML = selectedProducts
     .map(
       (product) => `
-      <div class="selected-product">
+      <div class="selected-product" data-product-id="${product.id}">
         <strong>${product.name}</strong>
         <span>${product.brand}</span>
+        <button type="button" class="remove-selected-product" aria-label="Remove ${product.name}">
+          Remove
+        </button>
       </div>
     `,
     )
@@ -100,6 +146,7 @@ function toggleSelectedProduct(productId, allProducts) {
     }
   }
 
+  saveSelectedProducts();
   renderSelectedProducts();
   displayProducts(allProducts || currentProducts);
 }
@@ -143,6 +190,30 @@ function getSelectedProductsPayload() {
   }));
 }
 
+/* Handle clicks on the selected products list */
+selectedProductsList.addEventListener("click", (e) => {
+  const removeButton = e.target.closest(".remove-selected-product");
+
+  if (!removeButton) {
+    return;
+  }
+
+  const selectedCard = removeButton.closest(".selected-product");
+  const productId = Number(selectedCard?.dataset.productId);
+
+  if (!Number.isNaN(productId)) {
+    selectedProducts = selectedProducts.filter(
+      (product) => product.id !== productId,
+    );
+    saveSelectedProducts();
+    renderSelectedProducts();
+
+    if (currentProducts.length > 0) {
+      displayProducts(currentProducts);
+    }
+  }
+});
+
 /* Send the conversation to the worker and show the answer */
 async function sendMessage(userText) {
   messages.push({ role: "user", content: userText });
@@ -179,6 +250,13 @@ generateRoutineButton.addEventListener("click", async () => {
   await sendMessage(prompt);
 });
 
+/* Clear all saved selections */
+const clearSelectionsButton = document.getElementById("clearSelections");
+
+clearSelectionsButton.addEventListener("click", () => {
+  clearSelectedProducts();
+});
+
 /* Chat form submission handler */
 chatForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -195,4 +273,5 @@ chatForm.addEventListener("submit", async (e) => {
 });
 
 /* Show the empty selected products state on load */
+loadSelectedProducts();
 renderSelectedProducts();
