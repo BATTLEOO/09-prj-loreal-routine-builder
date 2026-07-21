@@ -2,6 +2,14 @@
 const productSearch = document.getElementById("productSearch");
 const categoryFilter = document.getElementById("categoryFilter");
 const productsContainer = document.getElementById("productsContainer");
+const productModal = document.getElementById("productModal");
+const closeProductModal = document.getElementById("closeProductModal");
+const productModalImage = document.getElementById("productModalImage");
+const productModalTitle = document.getElementById("productModalTitle");
+const productModalBrand = document.getElementById("productModalBrand");
+const productModalDescription = document.getElementById(
+  "productModalDescription",
+);
 const selectedProductsList = document.getElementById("selectedProductsList");
 const generateRoutineButton = document.getElementById("generateRoutine");
 const chatForm = document.getElementById("chatForm");
@@ -26,7 +34,6 @@ if (rtlLanguages.some((language) => browserLanguage.startsWith(language))) {
 let allProducts = [];
 let selectedProducts = [];
 let currentProducts = [];
-let expandedProductIds = [];
 let activeCategory = "";
 let activeSearchTerm = "";
 let messages = [
@@ -149,7 +156,6 @@ function displayProducts(products) {
       const isSelected = selectedProducts.some(
         (selectedProduct) => selectedProduct.id === product.id,
       );
-      const isDescriptionOpen = expandedProductIds.includes(product.id);
 
       return `
     <div class="product-card${isSelected ? " selected" : ""}" data-product-id="${product.id}">
@@ -157,12 +163,9 @@ function displayProducts(products) {
       <div class="product-info">
         <h3>${product.name}</h3>
         <p>${product.brand}</p>
-        <button type="button" class="product-description-toggle" aria-expanded="${isDescriptionOpen}" aria-controls="product-description-${product.id}">
-          ${isDescriptionOpen ? "Hide details" : "Show details"}
+        <button type="button" class="product-description-toggle">
+          Show details
         </button>
-        <p class="product-description${isDescriptionOpen ? " visible" : ""}" id="product-description-${product.id}">
-          ${product.description}
-        </p>
       </div>
     </div>
   `;
@@ -190,17 +193,32 @@ function displayProducts(products) {
           return;
         }
 
-        if (expandedProductIds.includes(productId)) {
-          expandedProductIds = expandedProductIds.filter(
-            (expandedId) => expandedId !== productId,
-          );
-        } else {
-          expandedProductIds.push(productId);
-        }
+        const product = products.find((item) => item.id === productId);
 
-        displayProducts(products);
+        if (product) {
+          openProductModal(product);
+        }
       });
     });
+}
+
+/* Open the product details modal */
+function openProductModal(product) {
+  productModalImage.src = product.image;
+  productModalImage.alt = product.name;
+  productModalTitle.textContent = product.name;
+  productModalBrand.textContent = product.brand;
+  productModalDescription.textContent = product.description;
+
+  productModal.classList.add("is-open");
+  productModal.setAttribute("aria-hidden", "false");
+  closeProductModal.focus();
+}
+
+/* Close the product details modal */
+function closeProductDetailsModal() {
+  productModal.classList.remove("is-open");
+  productModal.setAttribute("aria-hidden", "true");
 }
 
 /* Show the products the user picked */
@@ -347,6 +365,22 @@ const clearSelectionsButton = document.getElementById("clearSelections");
 
 clearSelectionsButton.addEventListener("click", () => {
   clearSelectedProducts();
+});
+
+productModal.addEventListener("click", (event) => {
+  if (event.target.hasAttribute("data-modal-close")) {
+    closeProductDetailsModal();
+  }
+});
+
+closeProductModal.addEventListener("click", () => {
+  closeProductDetailsModal();
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && productModal.classList.contains("is-open")) {
+    closeProductDetailsModal();
+  }
 });
 
 /* Chat form submission handler */
