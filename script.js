@@ -346,6 +346,58 @@ function formatAssistantReply(replyText) {
     .join("");
 }
 
+/* Find product names mentioned in the assistant reply */
+function getProductsMentionedInReply(replyText) {
+  const normalizedReply = replyText.toLowerCase();
+  const catalog = allProducts.length > 0 ? allProducts : selectedProducts;
+
+  return catalog.filter((product) => {
+    const productName = product.name.toLowerCase();
+    const brandName = product.brand.toLowerCase();
+    const combinedName = `${brandName} ${productName}`;
+
+    return (
+      normalizedReply.includes(combinedName) ||
+      normalizedReply.includes(productName) ||
+      normalizedReply.includes(brandName)
+    );
+  });
+}
+
+/* Build a small product image gallery for advice that mentions products */
+function renderAdviceProducts(products) {
+  if (products.length === 0) {
+    return "";
+  }
+
+  const uniqueProducts = products.filter(
+    (product, index, array) =>
+      array.findIndex((item) => item.id === product.id) === index,
+  );
+
+  const galleryHtml = uniqueProducts
+    .slice(0, 4)
+    .map(
+      (product) => `
+        <div class="advice-product-card">
+          <img src="${product.image}" alt="${product.name}">
+          <div>
+            <strong>${product.name}</strong>
+            <span>${product.brand}</span>
+          </div>
+        </div>
+      `,
+    )
+    .join("");
+
+  return `
+    <div class="advice-products">
+      <span class="advice-products-label">Products mentioned</span>
+      <div class="advice-products-grid">${galleryHtml}</div>
+    </div>
+  `;
+}
+
 /* Send the selected products as structured data to the worker */
 function getSelectedProductsPayload() {
   return selectedProducts.map((product) => ({
@@ -432,6 +484,7 @@ async function sendMessage(userText) {
 
   thinkingBubble.remove();
   messages.push({ role: "assistant", content: reply });
+  const mentionedProducts = getProductsMentionedInReply(reply);
 
   chatWindow.insertAdjacentHTML(
     "beforeend",
@@ -439,6 +492,7 @@ async function sendMessage(userText) {
     <div class="chat-message bot-message">
       <strong>Advisor:</strong>
       <div class="chat-message-content">${formatAssistantReply(reply)}</div>
+      ${renderAdviceProducts(mentionedProducts)}
     </div>
   `,
   );
@@ -447,7 +501,7 @@ async function sendMessage(userText) {
 
 /* Create the first routine from the selected products */
 generateRoutineButton.addEventListener("click", async () => {
-  const prompt = "Build a personalized routine using the selected products.";
+  const prompt = `Build a personalized routine using these selected products:\n${getSelectedProductsSummary()}`;
 
   chatWindow.innerHTML = "";
   await sendMessage(prompt);

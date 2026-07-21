@@ -60,12 +60,13 @@ export default {
       const selectedProductsMessage =
         selectedProducts.length > 0
           ? {
-              role: "user",
-              content: `Selected products data:\n${JSON.stringify(
-                selectedProducts,
-                null,
-                2,
-              )}`,
+              role: "system",
+              content: `Selected products chosen by the user:\n${selectedProducts
+                .map(
+                  (product) =>
+                    `- ${product.brand} - ${product.name}: ${product.description}`,
+                )
+                .join("\n")}`,
             }
           : null;
 

@@ -155,6 +155,61 @@ body {
   font-weight: 700;
 }
 
+.advice-products {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid #eee0cd;
+}
+
+.advice-products-label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand-red);
+}
+
+.advice-products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 10px;
+}
+
+.advice-product-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border: 1px solid #eadcc5;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #fff 0%, #fff9ef 100%);
+}
+
+.advice-product-card img {
+  width: 44px;
+  height: 44px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.advice-product-card strong,
+.advice-product-card span {
+  display: block;
+  line-height: 1.3;
+}
+
+.advice-product-card strong {
+  font-size: 13px;
+  color: var(--brand-ink);
+}
+
+.advice-product-card span {
+  font-size: 12px;
+  color: #6b6253;
+}
+
 .user-message {
   align-self: flex-end;
   background: var(--brand-black);
