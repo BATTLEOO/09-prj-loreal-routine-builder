@@ -81,6 +81,9 @@ body {
 }
 
 .chat-window {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   padding: 20px;
   font-size: 18px;
   line-height: 1.5;
@@ -88,6 +91,30 @@ body {
   overflow-y: auto;
   background: #fafafa;
   margin-bottom: 20px;
+}
+
+.chat-message {
+  max-width: 78%;
+  padding: 14px 16px;
+  border-radius: 18px;
+  word-break: break-word;
+}
+
+.user-message {
+  align-self: flex-end;
+  background: #000;
+  color: #fff;
+  border-bottom-right-radius: 4px;
+  text-align: right;
+}
+
+.bot-message {
+  align-self: flex-start;
+  background: #fff;
+  color: #333;
+  border: 1px solid #ddd;
+  border-bottom-left-radius: 4px;
+  text-align: left;
 }
 
 /* placeholder message */
