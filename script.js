@@ -12,6 +12,7 @@ const workerUrl = "https://loreal-cloudflare-worker.jason01.workers.dev/";
 
 /* Keep track of selected products and the conversation */
 let selectedProducts = [];
+let currentProducts = [];
 let messages = [
   {
     role: "system",
@@ -36,18 +37,24 @@ async function loadProducts() {
 
 /* Create HTML for displaying product cards */
 function displayProducts(products) {
+  currentProducts = products;
+
   productsContainer.innerHTML = products
-    .map(
-      (product) => `
-    <div class="product-card" data-product-id="${product.id}">
+    .map((product) => {
+      const isSelected = selectedProducts.some(
+        (selectedProduct) => selectedProduct.id === product.id,
+      );
+
+      return `
+    <div class="product-card${isSelected ? " selected" : ""}" data-product-id="${product.id}">
       <img src="${product.image}" alt="${product.name}">
       <div class="product-info">
         <h3>${product.name}</h3>
         <p>${product.brand}</p>
       </div>
     </div>
-  `,
-    )
+  `;
+    })
     .join("");
 
   /* Let the user click a card to add or remove a product */
@@ -94,6 +101,7 @@ function toggleSelectedProduct(productId, allProducts) {
   }
 
   renderSelectedProducts();
+  displayProducts(allProducts || currentProducts);
 }
 
 /* Filter and display products when category changes */
