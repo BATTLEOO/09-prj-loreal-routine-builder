@@ -90,6 +90,7 @@ body {
   min-height: 360px;
   max-height: 460px;
   overflow-y: auto;
+  scroll-behavior: smooth;
   background: #fafafa;
   margin-bottom: 20px;
 }

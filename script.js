@@ -383,12 +383,17 @@ selectedProductsList.addEventListener("click", (e) => {
 });
 
 /* Send the conversation to the worker and show the answer */
+function scrollChatToBottom() {
+  chatWindow.scrollTop = chatWindow.scrollHeight;
+}
+
 async function sendMessage(userText) {
   messages.push({ role: "user", content: userText });
 
   chatWindow.innerHTML += `
     <div class="chat-message user-message"><strong>You:</strong> ${userText}</div>
   `;
+  scrollChatToBottom();
 
   const response = await fetch(workerUrl, {
     method: "POST",
@@ -414,6 +419,7 @@ async function sendMessage(userText) {
       <div class="chat-message-content">${formatAssistantReply(reply)}</div>
     </div>
   `;
+  scrollChatToBottom();
 }
 
 /* Create the first routine from the selected products */
