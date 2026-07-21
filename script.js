@@ -316,6 +316,36 @@ function getSelectedProductsSummary() {
     .join("\n");
 }
 
+/* Convert the assistant's markdown-style reply into readable HTML */
+function formatAssistantReply(replyText) {
+  const sections = replyText
+    .split(/\n\s*\n/)
+    .map((section) => section.trim())
+    .filter(Boolean);
+
+  return sections
+    .map((section) => {
+      const listItems = section.match(/^[-*•]\s.+/gm);
+
+      if (listItems) {
+        const listHtml = section
+          .split(/\n/)
+          .filter((line) => /^[-*•]\s/.test(line.trim()))
+          .map((line) => `<li>${line.replace(/^[-*•]\s/, "")}</li>`)
+          .join("");
+
+        return `<ul>${listHtml}</ul>`;
+      }
+
+      const normalizedText = section
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/\n/g, "<br />");
+
+      return `<p>${normalizedText}</p>`;
+    })
+    .join("");
+}
+
 /* Send the selected products as structured data to the worker */
 function getSelectedProductsPayload() {
   return selectedProducts.map((product) => ({
@@ -379,7 +409,10 @@ async function sendMessage(userText) {
   messages.push({ role: "assistant", content: reply });
 
   chatWindow.innerHTML += `
-    <div class="chat-message bot-message"><strong>Advisor:</strong> ${reply}</div>
+    <div class="chat-message bot-message">
+      <strong>Advisor:</strong>
+      <div class="chat-message-content">${formatAssistantReply(reply)}</div>
+    </div>
   `;
 }
 

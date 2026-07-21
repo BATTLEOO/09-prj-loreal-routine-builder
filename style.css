@@ -72,32 +72,58 @@ body {
   margin: 40px 0;
   border: 2px solid #000;
   border-radius: 8px;
-  padding: 26px;
+  padding: 32px;
 }
 
 .chatbox h2 {
-  font-size: 20px;
+  font-size: 22px;
   margin-bottom: 20px;
 }
 
 .chat-window {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  padding: 20px;
-  font-size: 18px;
-  line-height: 1.5;
-  height: 250px;
+  gap: 14px;
+  padding: 24px;
+  font-size: 17px;
+  line-height: 1.7;
+  min-height: 360px;
+  max-height: 460px;
   overflow-y: auto;
   background: #fafafa;
   margin-bottom: 20px;
 }
 
 .chat-message {
-  max-width: 78%;
-  padding: 14px 16px;
-  border-radius: 18px;
+  max-width: 86%;
+  padding: 16px 18px;
+  border-radius: 20px;
   word-break: break-word;
+}
+
+.chat-message-content {
+  margin-top: 8px;
+}
+
+.chat-message-content p {
+  margin-bottom: 12px;
+}
+
+.chat-message-content p:last-child {
+  margin-bottom: 0;
+}
+
+.chat-message-content ul {
+  margin: 10px 0 10px 20px;
+  padding-left: 18px;
+}
+
+.chat-message-content li {
+  margin-bottom: 8px;
+}
+
+.chat-message-content strong {
+  font-weight: 700;
 }
 
 .user-message {
@@ -364,8 +390,8 @@ body {
 .generate-btn {
   width: 100%;
   margin-top: 20px;
-  padding: 16px;
-  font-size: 18px;
+  padding: 18px;
+  font-size: 19px;
   font-weight: 500;
   color: #fff;
   background: #000;
